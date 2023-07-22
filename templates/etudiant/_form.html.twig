@@ -1,0 +1,161 @@
+{{ form_start(form) }}
+<div class="card-body">
+
+    <div class="mb-3 row">
+
+        {{ form_label(form.N_Inscriptionn , null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.N_Inscriptionn, {'attr': {'class': 'form-control'}}) }}</div>
+        {{ form_errors(form.N_Inscriptionn) }}
+    </div>
+    <div class="mb-3 row">
+        {{form_label(form.CIN, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.CIN, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.CIN) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Nom_Ar, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Nom_Ar, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Nom_Ar) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Prenom_Ar, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Prenom_Ar, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Prenom_Ar) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Nom_Fr, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Nom_Fr, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Nom_Fr) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Prenom_Fr, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Prenom_Fr, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Prenom_Fr) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Sexe, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Sexe, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Sexe) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Situation_Familiale, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Situation_Familiale, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Situation_Familiale) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Date_de_naissance, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Date_de_naissance, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Date_de_naissance) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Lieu_de_naissance_AR, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Lieu_de_naissance_AR, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Lieu_de_naissance_AR) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Lieu_de_naissance_FR, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Lieu_de_naissance_FR, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Lieu_de_naissance_FR) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Statut, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Statut, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Statut) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Passeport, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Passeport, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Passeport) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Adresse_Fr, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Adresse_Fr, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Adresse_Fr) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Adresse_Ar, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Adresse_Ar, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Adresse_Ar) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Code_gouvernorat, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Code_gouvernorat, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Code_gouvernorat) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Email, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Email, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Email) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Telephone_Fixe, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10"> {{ form_widget(form.Telephone_Fixe, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Telephone_Fixe) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Telephone_Portable, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Telephone_Portable, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Telephone_Portable) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Code_Nature_Bac, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Code_Nature_Bac, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Code_Nature_Bac) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Inscription, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Inscription, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Inscription) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Groupe, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Groupe, {'attr': {'class': 'form-select'}}) }}
+        </div>
+        {{ form_errors(form.Groupe) }}
+    </div>
+</div>
+<div class="card-footer d-flex justify-content-end">
+    <button class="btn btn-primary ">{{ button_label|default('Enregistrer') }}</button>
+</div>
+{{ form_end(form) }}

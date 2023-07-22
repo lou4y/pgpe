@@ -1,0 +1,36 @@
+{{ form_start(form) }}
+<div class="card-body">
+
+    <div class="mb-3 row">
+
+        {{ form_label(form.Nom , null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Nom, {'attr': {'class': 'form-control'}}) }}</div>
+        {{ form_errors(form.Nom) }}
+    </div>
+    <div class="mb-3 row">
+        {{form_label(form.Prenom, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Prenom, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Prenom) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.Cin, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.Cin, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.Cin) }}
+    </div>
+    <div class="mb-3 row">
+        {{ form_label(form.matricule, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        <div class="col-md-10">
+            {{ form_widget(form.matricule, {'attr': {'class': 'form-control'}}) }}
+        </div>
+        {{ form_errors(form.matricule) }}
+    </div>
+</div>
+<div class="card-footer d-flex justify-content-end">
+    <button class="btn btn-primary ">{{ button_label|default('Enregistrer') }}</button>
+</div>
+{{ form_end(form) }}

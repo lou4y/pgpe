@@ -1,0 +1,168 @@
+{% extends 'base.html.twig' %}
+
+{% block css %}
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="{{ asset('assets/img/favicon/favicon.ico') }}" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet"/>
+
+    <!-- Icons. Uncomment required icon fonts -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/fonts/boxicons.css') }}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/core.css') }}" class="template-customizer-core-css" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
+    <link rel="stylesheet" href="{{ asset('assets/css/demo.css') }}" />
+
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
+
+    <!-- Page CSS -->
+
+    <!-- Helpers -->
+    <script src="{{ asset('assets/vendor/js/helpers.js') }}"></script>
+
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{{ asset('assets/js/config.js') }}"></script>
+{% endblock %}
+{% block body %}
+    <div class="content-wrapper">
+
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="d-flex align-items-center mt-4">
+                <h4 class="fw-bold py-3 mb-4">Liste des emplois du temps</h4>
+            </div>
+            <div class="accordion mt-3" >
+                {% for professeur in professeurs %}
+                    <!-- Hoverable Table rows -->
+
+                    <div class="card accordion-item">
+                        <h5 class="accordion-header" id="heading{{ loop.index }}">
+
+                            <button
+                                    type="button"
+                                    class="accordion-button collapsed"
+                                    data-bs-toggle="collapse"
+                                    data-bs-target="#accordion{{ loop.index }}"
+                                    aria-expanded="false"
+                                    aria-controls="accordion{{ loop.index }}">
+                                {{ professeur.Nom }} {{ professeur.Prenom }}
+                            </button>
+
+                        </h5>
+
+                        <div
+                                id="accordion{{ loop.index }}"
+                                class="accordion-collapse collapse"
+                                aria-labelledby="heading{{ loop.index }}">
+                            <div class="accordion-body">
+                                <div class="card-header d-flex align-content-between">
+                                    <form method="post" action="{{ path('app_matiere_clear', {'id': professeur.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                        <input type="hidden" name="_Cleartoken" value="{{ csrf_token('delete_all_matieres' ~ professeur.id) }}">
+                                        <button class="btn btn-danger">Vider</button>
+                                    </form>
+                                    <a class="btn btn-primary" href="{{ path('app_matiere_new') }}"><i class="tf-icons bx bx-plus-circle me-2 rmt "></i> Matiere</a>
+                                </div>
+                                <div class="card-body mt-4">
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>Lundi</th>
+                                                <th>Mardi</th>
+                                                <th>Mercredi</th>
+                                                <th>Jeudi</th>
+                                                <th>Vendredi</th>
+                                                <th>Samedi</th>
+                                                <th>Dimanche</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody class="table-border-bottom-0">
+                                            {% for i in 8..17 %} {# Loop from 8am to 5pm #}
+                                                <tr style="height: 60px;">
+                                                    <td>{{ i }}:00</td> {# Time column #}
+                                                    {% for day in ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche'] %}
+                                                        <td class="pd">
+                                                            {% set currentTime = loop.index0 * 60 + i * 60 %} {# Calculate current time in minutes #}
+                                                            {% set matiere = professeur.matieres|filter(e => e.Jour == day and e.debut|date('H') == i )|first %}
+                                                            {# Get the matiere for the current cell #}
+                                                            {% if matiere %}
+                                                                <div style="position: relative;min-width:110px">
+                                                                        <button type="button"
+                                                                                style="position: absolute;top: {{ (matiere.debut|date('H') - i ) * 60 + matiere.debut|date('i') -30 }}px; height: {{ (matiere.fin|date('U') - matiere.debut|date('U')) / 60 }}px; width: 100%;"
+                                                                                class="btn btn-primary text-nowrap pd"
+                                                                                data-bs-toggle="popover"
+                                                                                data-bs-offset="0,14"
+                                                                                data-bs-placement="top"
+                                                                                data-bs-html="true"
+                                                                                data-bs-content="<h6>Durée :{{ matiere.debut|date('H:i') }} - {{ matiere.fin|date('H:i') }}</h6>  <h6>Groupe : {{ matiere.groupe.Nom }} </h6><div class='d-flex justify-content-between'>
+                                                                               <form method='post' action='{{ path('app_matiere_delete', {'id': matiere.id}) }}' >
+                                                                                    <input type='hidden' name='_token' value='{{ csrf_token('delete' ~ matiere.id) }}'>
+                                                                                    <button class='btn btn-sm btn-outline-danger'>Supprimer</button>
+                                                                               </form>
+                                                                               <a class='btn btn-sm btn-primary' href='{{ path('app_matiere_edit', {'id': matiere.id}) }}'>Editer</a>
+                                                                                 </div>"
+                                                                                title=""
+                                                                                data-bs-original-title="<h5>Matiere : {{ matiere.Nom}}</h5> "
+                                                                                aria-describedby="popover875069">
+                                                                                <div style="font-size: 13px">{{ matiere.Nom }}
+                                                                                   <br>
+                                                                                    {{ matiere.groupe.Nom }}</div>
+
+                                                                        </button>
+
+                                                                </div>
+                                                            {% else %}
+
+                                                            {% endif %}
+                                                        </td>
+                                                    {% endfor %}
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <tr>
+                        <h1 colspan="3">Vide</h1>
+                    </tr>
+                    <!--/ Hoverable Table rows -->
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block js %}
+    <!-- Core JS -->
+    <!-- build:js assets/vendor/js/core.js -->
+    <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+
+    <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+
+    <!-- Main JS -->
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+
+    <!-- Page JS -->
+    <script src="{{ asset('assets/js/ui-popover.js') }}"></script>
+    <!-- Place this tag in your head or just before your close body tag. -->
+    <script async defer src="https://buttons.github.io/buttons.js"></script>
+{% endblock %}
+
