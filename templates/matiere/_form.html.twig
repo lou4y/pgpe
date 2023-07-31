@@ -16,14 +16,14 @@
         {{ form_errors(form.Jour) }}
     </div>
     <div class="mb-3 row">
-        {{form_label(form.debut, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        {{ form_label(form.debut, null, {'label_attr': {'class': 'col-md-2 col-form-label'}}) }}
         <div class="col-md-10">
             {{ form_widget(form.debut, {'attr': {'class': 'form-control'}}) }}
         </div>
         {{ form_errors(form.debut) }}
     </div>
     <div class="mb-3 row">
-        {{form_label(form.fin, null, {'label_attr': {'class': 'col-md-2 col-form-label'}})}}
+        {{ form_label(form.fin, null, {'label_attr': {'class': 'col-md-2 col-form-label'}}) }}
         <div class="col-md-10">
             {{ form_widget(form.fin, {'attr': {'class': 'form-control'}}) }}
         </div>
@@ -48,4 +48,48 @@
 <div class="card-footer d-flex justify-content-end">
     <button class="btn btn-primary ">{{ button_label|default('Enregistrer') }}</button>
 </div>
+<script>
+    function formatTimeInputsTo24Hours() {
+        var debutInput = document.getElementById("{{ form.debut.vars.id }}");
+        var finInput = document.getElementById("{{ form.fin.vars.id }}");
+
+        var options = {
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+        };
+
+        debutInput.addEventListener("focus", function () {
+            if (debutInput.type === "text") {
+                debutInput.type = "time";
+                debutInput.value = debutInput.value ? debutInput.value : "00:00";
+                debutInput.setCustomValidity(""); // Reset any previous validation error
+            }
+        });
+
+        finInput.addEventListener("focus", function () {
+            if (finInput.type === "text") {
+                finInput.type = "time";
+                finInput.value = finInput.value ? finInput.value : "00:00";
+                finInput.setCustomValidity(""); // Reset any previous validation error
+            }
+        });
+
+        debutInput.addEventListener("blur", function () {
+            debutInput.type = "text";
+            var formatter = new Intl.DateTimeFormat("en", options);
+            debutInput.value = formatter.format(new Date("1970-01-01 " + debutInput.value));
+        });
+
+        finInput.addEventListener("blur", function () {
+            finInput.type = "text";
+            var formatter = new Intl.DateTimeFormat("en", options);
+            finInput.value = formatter.format(new Date("1970-01-01 " + finInput.value));
+        });
+    }
+
+    formatTimeInputsTo24Hours();
+</script>
+
+
 {{ form_end(form) }}

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Absence;
 use App\Form\AbsenceType;
 use App\Repository\AbsenceRepository;
+use App\Repository\GroupesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,10 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class AbsenceController extends AbstractController
 {
     #[Route('/', name: 'app_absence_index', methods: ['GET'])]
-    public function index(AbsenceRepository $absenceRepository): Response
+    public function index(AbsenceRepository $absenceRepository,GroupesRepository $groupesRepository): Response
     {
         return $this->render('absence/index.html.twig', [
             'absences' => $absenceRepository->findAll(),
+            'groupes' => $groupesRepository->findAll(),
         ]);
     }
 

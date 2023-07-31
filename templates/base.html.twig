@@ -108,7 +108,7 @@
                   </g>
                 </svg>
               </span>
-                    <span class="app-brand-text demo menu-text fw-bolder ms-2">Sneat</span>
+                    <span class="app-brand-text demo menu-text fw-bolder ms-2">PGPE</span>
                 </a>
 
                 <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto d-block d-xl-none">
@@ -120,66 +120,38 @@
 
             <ul class="menu-inner py-1">
                 <!-- Dashboard -->
-                <li class="menu-item active">
-                    <a href="index.html" class="menu-link">
-                        <i class="menu-icon tf-icons bx bx-home-circle"></i>
+                <li class="menu-item ">
+                    <a href="javascript:void(0);" class="menu-link">
+                        <i class="menu-icon tf-icons bx bx-chart"></i>
                         <div data-i18n="Analytics">Tableau de bord
                         </div>
                     </a>
                 </li>
 
                 <!-- Layouts -->
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link menu-toggle">
-                        <i class="menu-icon tf-icons bx bx-layout"></i>
-                        <div data-i18n="Layouts">Layouts</div>
+                <li class="menu-item ">
+                    <a href="{{path('app_absence_index')}}" class="menu-link">
+                        <i class="menu-icon tf-icons bx bxs-user-x"></i>
+                        <div data-i18n="Basic">Eliminations</div>
                     </a>
-
-                    <ul class="menu-sub">
-                        <li class="menu-item">
-                            <a href="layouts-without-menu.html" class="menu-link">
-                                <div data-i18n="Without menu">Without menu</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="layouts-without-navbar.html" class="menu-link">
-                                <div data-i18n="Without navbar">Without navbar</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="layouts-container.html" class="menu-link">
-                                <div data-i18n="Container">Container</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="layouts-fluid.html" class="menu-link">
-                                <div data-i18n="Fluid">Fluid</div>
-                            </a>
-                        </li>
-                        <li class="menu-item">
-                            <a href="layouts-blank.html" class="menu-link">
-                                <div data-i18n="Blank">Blank</div>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li class="menu-header small text-uppercase">
                     <span class="menu-header-text">Classes</span>
                 </li>
-                <li class="menu-item">
-                    <a href="{{ path('app_niveau_index')}}" class="menu-link">
+                <li class="menu-item {% if 'niveau' in app.request.get('_route')  %}active{% endif %}">
+                    <a href="{{ path('app_niveau_index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-list-ul"></i>
                         <div data-i18n="Basic">Listes des Niveaux</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item {% if app.request.get('_route') == 'app_classe_index' %}active{% endif %}">
                     <a href="{{ path('app_classe_index')}}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-list-ul"></i>
                         <div data-i18n="Basic">Listes des Groupes</div>
                     </a>
                 </li>
-                <li class="menu-item">
+                <li class="menu-item {% if 'etudiant' in app.request.get('_route')  %}active{% endif %}">
                     <a href="{{ path('app_etudiant_index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-user"></i>
                         <div data-i18n="Basic">Listes des etudiants</div>
@@ -188,14 +160,14 @@
                 <!-- Professeurs -->
                 <li class="menu-header small text-uppercase"><span class="menu-header-text">Professeurs</span></li>
                 <!-- Professeurs -->
-                <li class="menu-item">
+                <li class="menu-item {% if 'professeur' in app.request.get('_route')  %}active{% endif %}">
                     <a href="{{ path('app_professeur_index') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-user"></i>
                         <div data-i18n="Basic">Listes des Professeurs</div>
                     </a>
                 </li>
 
-                <li class="menu-item">
+                <li class="menu-item {% if app.request.get('_route') == 'app_emplois' %}active{% endif %}">
                     <a href="{{ path('app_emplois') }}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-calendar"></i>
                         <div data-i18n="Boxicons">Emplois du temps</div>
@@ -226,7 +198,7 @@
                         <li class="nav-item navbar-dropdown dropdown-user dropdown">
                             <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                                 <div class="avatar avatar-online">
-                                    <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                                    <img src="{{ asset('assets/img/user_icon_011.jpg') }}" alt class="w-px-40 h-auto rounded-circle" />
                                 </div>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end">
@@ -235,7 +207,7 @@
                                         <div class="d-flex">
                                             <div class="flex-shrink-0 me-3">
                                                 <div class="avatar avatar-online">
-                                                    <img src="{{ asset('assets/img/avatars/1.png') }}" alt class="w-px-40 h-auto rounded-circle" />
+                                                    <img src="{{ asset('assets/img/user_icon_011.jpg') }}" alt class="w-px-40 h-auto rounded-circle" />
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1">
@@ -252,23 +224,8 @@
                                 </li>
                                 <li>
                                     <a class="dropdown-item" href="#">
-                                        <i class="bx bx-user me-2"></i>
-                                        <span class="align-middle">My Profile</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">
                                         <i class="bx bx-cog me-2"></i>
                                         <span class="align-middle">Settings</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                        <span class="d-flex align-items-center align-middle">
-                          <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                          <span class="flex-grow-1 align-middle">Billing</span>
-                          <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
-                        </span>
                                     </a>
                                 </li>
                                 <li>

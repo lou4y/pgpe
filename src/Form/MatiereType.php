@@ -34,12 +34,14 @@ class MatiereType extends AbstractType
                 'widget'=>'single_text',
                  ])
 
-            ->add('fin',TimeType::class)
+            ->add('fin',TimeType::class,[
+                'widget'=>'single_text',
+            ])
             ->add('professeur',EntityType::class,[
                 'class' => Professeur::class,
-                'choice_label' => 'Nom' ,
-
-            ])
+                'choice_label' => function (Professeur $professeur) {
+                    return $professeur->getNom() . ' ' . $professeur->getPrenom();
+                },])
             ->add('groupe',EntityType::class,[
                 'class' => Groupes::class,
                 'choice_label' => 'Nom' ,
