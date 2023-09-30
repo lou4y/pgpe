@@ -13,6 +13,7 @@ class ExcelUploadFormType extends AbstractType
     {
         $builder
             ->add('excelFile', FileType::class ,['attr' => ['class' => 'form-control'],'label' => 'Fichier Excel '])
+            ->add('separator', null, ['attr' => ['class' => 'form-control'],'label' => 'Séparateur '])
         ;
     }
 

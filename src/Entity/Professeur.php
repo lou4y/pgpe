@@ -27,6 +27,9 @@ class Professeur
     #[ORM\Column]
     private ?int $matricule = null;
 
+    #[ORM\Column]
+    private ?string $email = null;
+
     #[ORM\OneToMany(mappedBy: 'Professeur', targetEntity: Matiere::class)]
     private Collection $matieres;
 
@@ -89,6 +92,18 @@ class Professeur
     public function setMatricule(int $matricule): static
     {
         $this->matricule = $matricule;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
 
         return $this;
     }

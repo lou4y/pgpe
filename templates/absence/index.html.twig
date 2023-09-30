@@ -40,8 +40,6 @@
             </div>
             <div class="accordion mt-3" >
                 {% for groupe in groupes %}
-                    <!-- Hoverable Table rows -->
-
                     <div class="card accordion-item">
                         <h5 class="accordion-header" id="heading{{ loop.index }}">
                             <button
@@ -52,7 +50,7 @@
                                     aria-expanded="false"
                                     aria-controls="accordion{{ loop.index }}"
                             >
-                                {{ groupe.Nom }}
+                               Abcences : {{ groupe.Nom }}
                             </button>
                         </h5>
                         <div
@@ -61,41 +59,69 @@
                                 aria-labelledby="heading{{ loop.index }}"
                         >
                             <div class="accordion-body">
-                                <div class="table-responsive text-nowrap" style="min-height: 170px">
-                                    <table class="table table-hover">
-                                        <thead>
-                                        <tr>
-                                            <th>Nom & Prénom</th>
-                                            <th></th>
-                                            {% for matiere in groupe.matieres %}
-                                                <th>{{ matiere.Nom }}</th>
-                                            {% endfor %}
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="container-fluid d-flex flex-md-row flex-column justify-content-between align-items-md-center gap-1 container-p-x py-3">
+                                            <div class="d-flex flex-row">
+                                                <div class="px-3">
+                                                    <h5>Elimine : <span class="badge bg-label-danger"> </span> </h5>
+                                                </div>
+                                                <div class="px-3">
+                                                    <h5>Non Elimine : <span class="badge bg-label-success"> </span> </h5>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <a href="{{ path('download_absence', {'groupId': groupe.id}) }}" class="btn btn-primary">
+                                                    <span class="tf-icons bx bx-download rmt1"></span> Telecharger excel
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="table-responsive text-nowrap" style="min-height: 170px">
+                                            <table class="table table-hover">
+                                                <thead class="table-light">
+                                                <tr>
+                                                    <th>Nom & Prénom</th>
+                                                    {% for matiere in groupe.matieres %}
+                                                        <th class="text-center">{{ matiere.Nom }}</th>
+                                                    {% endfor %}
 
-                                        </tr>
-                                        </thead>
-                                        <tbody class="table-border-bottom-0">
-                                        {% for etudiant in groupe.etudiants %}
-                                        {% set abs=0 %}
-                                            <tr>
-                                                <td>{{ etudiant.NomFr }} {{ etudiant.PrenomFr }}</td>
-                                                {% for absence in etudiant.Absence %}
-                                                    {% if absence.matiere.Nom == matiere.Nom and absence.present == false %}
-                                                        {% set abs=abs+1 %}
-                                                        <td class="text-center"><i class="fa fa-times text-danger"></i> {{ abs }}</td>
-                                                    {% else %}
-                                                        <td class="text-center"><i class="fa fa-check text-success"></i>0 </td>
-                                                    {% endif %}
-
-                                            </tr>
+                                                </tr>
+                                                </thead>
+                                                <tbody class="table-border-bottom-0">
+                                                {% for etudiant in groupe.etudiants %}
+                                                    <tr>
+                                                        <td>{{ etudiant.NomFr }} {{ etudiant.PrenomFr }}</td>
+                                                        {% for matiere in groupe.matieres %}
+                                                            {% set abs=0 %}
+                                                            {% for absence in etudiant.Absence %}
+                                                                {% if absence.matiere.Nom == matiere.Nom and absence.present == false %}
+                                                                    {% set abs=abs+1 %}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                            {% if abs > 4 %}
+                                                                <td class="text-center">
+                                                                    <span class="badge bg-label-danger">{{ abs }}</span>
+                                                                </td>
+                                                            {% else %}
+                                                                <td class="text-center">
+                                                                    <span class="badge bg-label-success">{{ abs }}</span>
+                                                                </td>
+                                                            {% endif %}
+                                                        {% endfor %}
+                                                    </tr>
+                                                {% else %}
+                                                    <tr>
+                                                        <td colspan="3">Aucun etudiant trouvé</td>
+                                                    </tr>
                                                 {% endfor %}
-                                        {% else %}
-                                            <tr>
-                                                <td colspan="3">Aucun etudiant trouvé</td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
 

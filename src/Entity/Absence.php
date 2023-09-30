@@ -15,7 +15,7 @@ class Absence
     private ?int $id = null;
 
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATE_MUTABLE)]
     private ?\DateTimeInterface $Date = null;
 
 
@@ -23,9 +23,11 @@ class Absence
     private ?bool $present = null;
 
     #[ORM\ManyToOne(inversedBy: 'Absence')]
+    #[ORM\JoinColumn(nullable: false,onDelete: 'CASCADE')]
     private ?Etudiant $etudiant = null;
 
     #[ORM\ManyToOne(inversedBy: 'Absence')]
+    #[ORM\JoinColumn(nullable: false,onDelete: 'CASCADE')]
     private ?Matiere $matiere = null;
 
 

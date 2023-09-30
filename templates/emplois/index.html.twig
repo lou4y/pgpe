@@ -97,7 +97,8 @@
                                                                                 data-bs-offset="0,14"
                                                                                 data-bs-placement="top"
                                                                                 data-bs-html="true"
-                                                                                data-bs-content="<h6>Durée :{{ matiere.debut|date('H:i') }} - {{ matiere.fin|date('H:i') }}</h6>  <h6>Groupe : {{ matiere.groupe.Nom }} </h6><div class='d-flex justify-content-between'>
+                                                                                data-bs-content="<h6>Durée :{{ matiere.debut|date('H:i') }} - {{ matiere.fin|date('H:i') }}</h6>  <h6>Groupe :{% if matiere.groupe!=null %} {{ matiere.groupe.Nom }}{% else %}
+  vide{% endif %}</h6><div class='d-flex justify-content-between'>
                                                                                <form method='post' action='{{ path('app_matiere_delete', {'id': matiere.id}) }}' >
                                                                                     <input type='hidden' name='_token' value='{{ csrf_token('delete' ~ matiere.id) }}'>
                                                                                     <button class='btn btn-sm btn-outline-danger'>Supprimer</button>
@@ -109,7 +110,11 @@
                                                                                 aria-describedby="popover875069">
                                                                                 <div style="font-size: 13px">{{ matiere.Nom }}
                                                                                    <br>
-                                                                                    {{ matiere.groupe.Nom }}</div>
+                                                                                    {% if matiere.groupe!=null %} {{ matiere.groupe.Nom }}
+                                                                                    {% else %}
+
+                                                                                    {% endif %}
+                                                                                </div>
 
                                                                         </button>
 

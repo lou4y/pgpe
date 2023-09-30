@@ -19,9 +19,10 @@ class Groupes
     private ?string $Nom = null;
 
     #[ORM\ManyToOne(inversedBy: 'classes')]
+    #[ORM\JoinColumn(nullable: false,onDelete: 'CASCADE')]
     private ?Niveau $niveau = null;
 
-    #[ORM\OneToMany(mappedBy: 'Groupe', targetEntity: Etudiant::class)]
+    #[ORM\OneToMany(mappedBy: 'Groupe', targetEntity: Etudiant::class,)]
     private Collection $etudiants;
 
     #[ORM\OneToMany(mappedBy: 'Groupe', targetEntity: Matiere::class)]

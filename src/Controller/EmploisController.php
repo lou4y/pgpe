@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Controller;
-
 use App\Entity\Matiere;
 use App\Entity\Professeur;
 use App\Repository\ProfesseurRepository;

@@ -20,6 +20,87 @@ class AbsenceRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Absence::class);
     }
+    public function findByabsencesInMonth($value): array
+    {
+        $absences = $this->createQueryBuilder('a')
+            ->where('a.present = :present')
+            ->getQuery()
+            ->setParameter('present', false)
+            ->getResult();
+
+        $absencesInMonth = [];
+        $month = (int)$value;
+
+        foreach ($absences as $absence) {
+            if ((int)$absence->getDate()->format('n') === $month) {
+                $absencesInMonth[] = $absence;
+            }
+        }
+
+        return $absencesInMonth;
+    }
+    public function findByAbsencesOfGroupInMonth($value): array
+    {
+        $absences = $this->createQueryBuilder('a')
+            ->leftJoin('a.etudiant', 's')  // Assuming the property for the student association is 'student'
+            ->leftJoin('s.Groupe', 'g')    // Assuming the property for the group association is 'group'
+            ->where('a.present = :present')
+            ->getQuery()
+            ->setParameter('present', false)
+            ->getResult();
+
+        $absencesInMonth = [];
+        $month = (int)$value;
+
+        foreach ($absences as $absence) {
+            if ((int)$absence->getDate()->format('n') === $month) {
+                $absencesInMonth[] = $absence;
+            }
+        }
+
+        $groupedAbsences = [];
+        foreach ($absencesInMonth as $absence) {
+            $group = $absence->getEtudiant()->getGroupe() ; // Assuming you have a method to get the group from a student
+            $groupId = $group->getId();  // Assuming the group entity has an ID property
+
+            if (!isset($groupedAbsences[$groupId])) {
+                $groupedAbsences[$groupId] = [
+                    'group' => $group,
+                    'absenceCount' => 1,
+                ];
+            } else {
+                $groupedAbsences[$groupId]['absenceCount']++;
+            }
+        }
+
+        return $groupedAbsences;
+    }
+    public function findByAbsencesOfGroupInTotal(): array
+    {
+        $absences = $this->createQueryBuilder('a')
+            ->leftJoin('a.etudiant', 's')  // Assuming the property for the student association is 'student'
+            ->leftJoin('s.Groupe', 'g')    // Assuming the property for the group association is 'group'
+            ->where('a.present = :present')
+            ->getQuery()
+            ->setParameter('present', false)
+            ->getResult();
+
+        foreach ($absences as $absence) {
+            $group = $absence->getEtudiant()->getGroupe() ; // Assuming you have a method to get the group from a student
+            $groupId = $group->getId();  // Assuming the group entity has an ID property
+
+            if (!isset($groupedAbsences[$groupId])) {
+                $groupedAbsences[$groupId] = [
+                    'group' => $group,
+                    'absenceCount' => 1,
+                ];
+            } else {
+                $groupedAbsences[$groupId]['absenceCount']++;
+            }
+        }
+
+        return $groupedAbsences;
+    }
 
 //    /**
 //     * @return Absence[] Returns an array of Absence objects
@@ -45,4 +126,5 @@ class AbsenceRepository extends ServiceEntityRepository
 //            ->getOneOrNullResult()
 //        ;
 //    }
+
 }

@@ -80,6 +80,7 @@ class Etudiant
     private ?string $Inscription = null;
 
     #[ORM\ManyToOne(inversedBy: 'etudiants')]
+    #[ORM\JoinColumn(nullable: false,onDelete: 'CASCADE')]
     private ?Groupes $Groupe = null;
 
     #[ORM\OneToMany(mappedBy: 'etudiant', targetEntity: Absence::class)]

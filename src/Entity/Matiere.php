@@ -29,9 +29,11 @@ class Matiere
     private ?\DateTimeInterface $fin = null;
 
     #[ORM\ManyToOne(inversedBy: 'matieres')]
+    #[ORM\JoinColumn(nullable: true,onDelete: 'SET NULL')]
     private ?Professeur $Professeur = null;
 
-    #[ORM\ManyToOne(inversedBy: 'matieres')]
+    #[ORM\ManyToOne(inversedBy: 'matieres',)]
+    #[ORM\JoinColumn(nullable: true,onDelete: 'SET NULL')]
     private ?Groupes $Groupe = null;
 
     #[ORM\OneToMany(mappedBy: 'matiere', targetEntity: Absence::class)]

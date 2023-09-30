@@ -7,6 +7,8 @@ use App\Form\AbsenceType;
 use App\Repository\AbsenceRepository;
 use App\Repository\GroupesRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,60 +26,79 @@ class AbsenceController extends AbstractController
         ]);
     }
 
-    #[Route('/new', name: 'app_absence_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    #[Route('/download/{groupId}', name: 'download_absence', methods: ['GET'])]
+    public function downloadAttendance(Request $request,int $groupId,GroupesRepository $groupesRepository,AbsenceRepository $absenceRepository): Response
     {
-        $absence = new Absence();
-        $form = $this->createForm(AbsenceType::class, $absence);
-        $form->handleRequest($request);
+        $group = $groupesRepository->find($groupId);
+        // Create a new Spreadsheet object
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($absence);
-            $entityManager->flush();
+        // Set the class name and school year/semester in the first two rows
+        $sheet->setCellValue('A1', 'Année:');
+        $sheet->setCellValue('B1', '2023');
+        $sheet->setCellValue('C1', 'Semestre:');
+        $sheet->setCellValue('D1', '1');
+        $sheet->setCellValue('A2', 'Groupe:');
+        $sheet->setCellValue('B2', $group->getNom());
 
-            return $this->redirectToRoute('app_absence_index', [], Response::HTTP_SEE_OTHER);
+        // Set up the header for the student attendance table
+        $sheet->setCellValue('A4', 'Nom');
+        $sheet->setCellValue('B4', 'Prenom');
+        $column=3;
+        foreach ($group->getMatieres() as $matiere) {
+            $sheet->setCellValue([$column, 4], $matiere->getNom());
+            $column++;
+        }
+        $studentData=[];
+        // Fetch student and subject data from the database (replace with your actual query)
+        foreach ($group->getEtudiants() as $etudiant) {
+            $elimination=[];
+            foreach ($group->getMatieres() as $matiere) {
+                $absence = $absenceRepository->findBy(['etudiant'=>$etudiant,'matiere'=>$matiere,'present'=>false]);
+                //lenght of absence
+                $elimination[]=[
+                    count($absence) >1?'elimine':'Non elimine',
+                ];
+            }
+            $studentData[] = [
+                $etudiant->getNomFr(),
+                $etudiant->getPrenomfr(),
+                $elimination
+            ];
         }
 
-        return $this->render('absence/new.html.twig', [
-            'absence' => $absence,
-            'form' => $form,
-        ]);
-    }
-
-    #[Route('/{id}', name: 'app_absence_show', methods: ['GET'])]
-    public function show(Absence $absence): Response
-    {
-        return $this->render('absence/show.html.twig', [
-            'absence' => $absence,
-        ]);
-    }
-
-    #[Route('/{id}/edit', name: 'app_absence_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Absence $absence, EntityManagerInterface $entityManager): Response
-    {
-        $form = $this->createForm(AbsenceType::class, $absence);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->flush();
-
-            return $this->redirectToRoute('app_absence_index', [], Response::HTTP_SEE_OTHER);
+        // Populate the table with student attendance data
+        $row = 5; // Start from row 5 to skip the first 3 rows
+        foreach ($studentData as $data) {
+              $sheet->setCellValue('A' . $row, $data[0]); // Student name
+              $sheet->setCellValue('B' . $row, $data[1]); // Subject
+            $startColumn = 3;
+            foreach ($data[2] as $absence) {
+                $sheet->setCellValue([$startColumn, $row], $absence[0]); // Absence number
+                $startColumn++;
+            }
+        // You can add more columns for absence numbers if needed
+        $row++;
         }
 
-        return $this->render('absence/edit.html.twig', [
-            'absence' => $absence,
-            'form' => $form,
-        ]);
+        // Create a new Xlsx writer and save the file
+        $writer = new Xlsx($spreadsheet);
+        $filename = 'Elimination_group_' . $group->getNom() . '.xlsx'; // Adjust the filename
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/' . $filename;
+
+
+        $writer->save($filePath);
+
+        // Provide the file to the user for download
+        $response = new Response(file_get_contents($filePath));
+        $response->headers->set('Content-Type', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        $response->headers->set('Content-Disposition', 'attachment;filename="' . $filename . '"');
+
+        return $response;
     }
 
-    #[Route('/{id}', name: 'app_absence_delete', methods: ['POST'])]
-    public function delete(Request $request, Absence $absence, EntityManagerInterface $entityManager): Response
-    {
-        if ($this->isCsrfTokenValid('delete'.$absence->getId(), $request->request->get('_token'))) {
-            $entityManager->remove($absence);
-            $entityManager->flush();
-        }
 
-        return $this->redirectToRoute('app_absence_index', [], Response::HTTP_SEE_OTHER);
-    }
+
+
 }

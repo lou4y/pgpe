@@ -12,7 +12,7 @@ use PhpOffice\PhpSpreadsheet\IOFactory;
 use Doctrine\DBAL\Connection;
 use App\Entity\Etudiant;
 use App\Form\EtudiantType;
-use App\Form\ExcelUploadFormType;
+use App\Form\ExcelProfUploadFormType;
 use App\Repository\EtudiantRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,13 +23,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class EtudiantController extends AbstractController
 {
     #[Route('/', name: 'app_etudiant_index', methods: ['GET','POST' ])]
-    public function index(EtudiantRepository $etudiantRepository,Request $request, Connection $connection ,EntityManagerInterface $entityManager,NiveauRepository $niveauRepository,GroupesRepository $groupesRepository): Response
+    public function index(Request $request,EntityManagerInterface $entityManager,NiveauRepository $niveauRepository,GroupesRepository $groupesRepository): Response
     {
-        $form = $this->createForm(ExcelUploadFormType::class);
+        $form = $this->createForm(ExcelProfUploadFormType::class);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $excelFile = $form->get('excelFile')->getData();
+            $separator = $form->get('separator')->getData();
+            if ($separator == null) {
+                $separator = " ";
+            }
 
             // Move the uploaded file to a temporary location
             $tempFile = tempnam(sys_get_temp_dir(), 'excel');
@@ -38,8 +41,6 @@ class EtudiantController extends AbstractController
             // Read the Excel file
             $spreadsheet = IOFactory::load($tempFile);
             $worksheet = $spreadsheet->getActiveSheet();
-            $list =[];
-            $list1 =[];
             // Search for the location of the first cell containing "N° Inscription" in the column headers
             $searchValue = 'N° Inscription';
             $searchedcolumn = null;
@@ -57,9 +58,6 @@ class EtudiantController extends AbstractController
                     }
                 }
             }
-            $list1[]=$searchedcolumn;
-            $list1[]=$searchedrow;
-
             if ($searchedcolumn !== null) {
                 // Get the starting row and column of the table
                 $startColumn = $searchedcolumn;
@@ -102,7 +100,7 @@ class EtudiantController extends AbstractController
                     $etudiant->setTelephonePortable((int)$etudiantData[18]);
                     $etudiant->setCodeNatureBac((int)$etudiantData[19]);
                     $etudiant->setInscription($etudiantData[20]);
-                    $parts = explode("- ", $etudiantData[21]);
+                    $parts = explode($separator, $etudiantData[21]);
                     $firstPart = trim($parts[0]);
                     if ($niveauRepository->findOneBy(['Nom'=>$firstPart]))
                     {

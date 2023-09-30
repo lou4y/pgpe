@@ -120,8 +120,8 @@
 
             <ul class="menu-inner py-1">
                 <!-- Dashboard -->
-                <li class="menu-item ">
-                    <a href="javascript:void(0);" class="menu-link">
+                <li class="menu-item {% if 'dashboard' in app.request.get('_route')  %}active{% endif %}">
+                    <a href="{{path('app_dashboard')}}" class="menu-link">
                         <i class="menu-icon tf-icons bx bx-chart"></i>
                         <div data-i18n="Analytics">Tableau de bord
                         </div>
@@ -129,8 +129,8 @@
                 </li>
 
                 <!-- Layouts -->
-                <li class="menu-item ">
-                    <a href="{{path('app_absence_index')}}" class="menu-link">
+                <li class="menu-item {% if 'absence' in app.request.get('_route')  %}active{% endif %}">
+                    <a href="{{path('app_absence_index')}}" class="menu-link ">
                         <i class="menu-icon tf-icons bx bxs-user-x"></i>
                         <div data-i18n="Basic">Eliminations</div>
                     </a>
@@ -222,18 +222,10 @@
                                 <li>
                                     <div class="dropdown-divider"></div>
                                 </li>
-                                <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bx bx-cog me-2"></i>
-                                        <span class="align-middle">Settings</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <div class="dropdown-divider"></div>
-                                </li>
+
                                 <li>
                                     <a class="dropdown-item"href="{{ path('app_logout') }}"><i class="bx bx-power-off me-2"></i>
-                                        <span class="align-middle">Log Out</span></a>
+                                        <span class="align-middle">Se Deconnecter</span></a>
                                 </li>
                             </ul>
                         </li>
@@ -275,7 +267,7 @@
 <script src="{{asset('assets/js/main.js') }}"></script>
 
 <!-- Page JS -->
-<script src="{{asset('assets/js/dashboards-analytics.js') }}"></script>
+    <script src="{{asset('dash.js') }}"></script>
 
 <!-- Place this tag in your head or just before your close body tag. -->
 <script async defer src="https://buttons.github.io/buttons.js"></script>
